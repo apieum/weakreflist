@@ -1,4 +1,5 @@
 setup.py
+weakreflist.py
 weakreflist.egg-info/PKG-INFO
 weakreflist.egg-info/SOURCES.txt
 weakreflist.egg-info/dependency_links.txt
