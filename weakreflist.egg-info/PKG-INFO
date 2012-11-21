@@ -1,0 +1,26 @@
+Metadata-Version: 1.1
+Name: weakreflist
+Version: 0.1
+Summary: A WeakList class for storing objects using weak references in a list.
+Home-page: http://www.python.org/pypi/weakreflist
+Author: Grégory Salvan
+Author-email: apieum@gmail.com
+License: LGPL
+Description: ===========
+        weakreflist
+        ===========
+        ---------------------------------------------------------------------
+        A WeakList class for storing objects using weak references in a list.
+        ---------------------------------------------------------------------
+        
+        *usage*
+         see tests
+Platform: UNKNOWN
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Other Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
