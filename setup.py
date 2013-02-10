@@ -5,7 +5,7 @@ import os
 pkgName = 'weakreflist'
 setup(
     name=pkgName,
-    version='0.1',
+    version='0.2',
     url='http://www.python.org/pypi/' + pkgName,
     author='Grégory Salvan',
     author_email='apieum@gmail.com',
@@ -15,7 +15,7 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Environment :: Other Environment",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
