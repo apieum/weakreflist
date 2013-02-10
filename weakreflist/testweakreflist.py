@@ -11,7 +11,7 @@ class WeakrefListTest(unittest.TestCase):
     def setUp(self):
         self.wrList = WeakList()
 
-    def test_is_instance_of_list(self):
+    def test_it_is_instance_of_list(self):
         self.assertIsInstance(self.wrList, list)
 
     def test_it_store_a_weakref_ref(self):
