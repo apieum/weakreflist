@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-from setuptools import setup, find_packages
+from setuptools import setup
 import os
 
 pkgName = 'weakreflist'
@@ -22,9 +22,7 @@ setup(
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
-    packages=find_packages(),
     include_package_data=True,
-    py_modules=['weakreflist'],
-    install_requires=['setuptools'],
+    packages=['weakreflist'],
     zip_safe=False,
 )
