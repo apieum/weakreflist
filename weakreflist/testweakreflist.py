@@ -85,6 +85,11 @@ class WeakrefListTest(unittest.TestCase):
         del myFake
         self.assertEqual(0, len(wrList))
 
+    def test_it_supports_slice(self):
+        var = range(10)
+        wrList = WeakList(var)
+        self.assertEqual([1, 2, 3], wrList[1:4])
+
 
 
 if __name__ == "__main__":

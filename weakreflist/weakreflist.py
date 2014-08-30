@@ -25,7 +25,12 @@ class WeakList(list):
         return list.__contains__(self, self._makeRef(item))
 
     def __getitem__(self, key):
+        if isinstance(key, slice):
+            return type(self)(value for value in list.__getitem__(self, key))
         return self._getValue(list.__getitem__(self, key))
+
+    def __getslice__(self, i, j):
+        return self.__getitem__(slice(i, j))
 
     def __setitem__(self, key, value):
         return list.__setitem__(self, key, self._getRef(value))
