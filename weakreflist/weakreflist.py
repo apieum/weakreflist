@@ -3,6 +3,9 @@ import weakref
 
 
 class WeakList(list):
+    def __init__(self, values=list()):
+        list.__init__(self, (self._getRef(value) for value in values))
+
     def _getRef(self, value):
         value = self._makeRef(value)
         if list.__contains__(self, value):

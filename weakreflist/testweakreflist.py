@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 import weakref
 import unittest
-from weakreflist import WeakList
+from .weakreflist import WeakList
 
 
 class WeakrefListTest(unittest.TestCase):
@@ -77,6 +77,14 @@ class WeakrefListTest(unittest.TestCase):
             num_mock += 1
             self.assertEqual(mock, myFake)
         self.assertEqual(num_mock, len(self.wrList))
+
+    def test_it_appends_ref_values_at_init(self):
+        myFake = self.objectFake()
+        wrList = WeakList([myFake])
+        self.assertEqual(1, len(wrList))
+        del myFake
+        self.assertEqual(0, len(wrList))
+
 
 
 if __name__ == "__main__":
