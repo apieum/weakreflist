@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
 import weakref
+import sys
+is_pypy = '__pypy__' in sys.builtin_module_names
+if is_pypy:
+    import gc
 
 
 class WeakList(list):
@@ -45,6 +49,7 @@ class WeakList(list):
         value = self._makeRef(value)
         while list.__contains__(self, value):
             list.remove(self, value)
+        if is_pypy: gc.collect()
 
     def index(self, *args, **kwargs):
         return list.index(self, *map(self._makeRef, args), **kwargs)

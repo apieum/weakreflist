@@ -2,6 +2,10 @@
 import weakref
 import unittest
 from .weakreflist import WeakList
+import sys
+is_pypy = '__pypy__' in sys.builtin_module_names
+if is_pypy:
+    import gc
 
 
 class WeakrefListTest(unittest.TestCase):
@@ -39,6 +43,8 @@ class WeakrefListTest(unittest.TestCase):
         self.wrList.append(myFake)
         self.assertEqual(2, len(self.wrList))
         del myFake
+        if is_pypy:
+            gc.collect()
         self.assertEqual(0, len(self.wrList))
 
     def test_it_can_remove_a_value(self):
@@ -83,11 +89,12 @@ class WeakrefListTest(unittest.TestCase):
         wrList = WeakList([myFake])
         self.assertEqual(1, len(wrList))
         del myFake
+        if is_pypy:
+            gc.collect()
         self.assertEqual(0, len(wrList))
 
     def test_it_supports_slice(self):
-        var = range(10)
-        wrList = WeakList(var)
+        wrList = WeakList(range(10))
         self.assertEqual([1, 2, 3], wrList[1:4])
 
 
