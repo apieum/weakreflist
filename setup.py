@@ -5,7 +5,7 @@ import os
 pkgName = 'weakreflist'
 setup(
     name=pkgName,
-    version='0.2',
+    version='0.3',
     url='http://www.python.org/pypi/' + pkgName,
     author='Grégory Salvan',
     author_email='apieum@gmail.com',
@@ -24,5 +24,5 @@ setup(
         ],
     include_package_data=True,
     packages=['weakreflist'],
-    zip_safe=False,
+    zip_safe=True,
 )
