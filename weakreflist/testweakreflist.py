@@ -69,13 +69,13 @@ class WeakrefListTest(unittest.TestCase):
         self.assertEqual(0, self.wrList.index(myFake0))
         self.assertEqual(2, self.wrList.index(myFake1))
 
-    def test_it_support_addition(self):
+    def test_it_supports_addition(self):
         myFake = self.objectFake()
         myList = WeakList([myFake])
         self.wrList += myList
         self.assertEqual(1, len(self.wrList))
 
-    def test_it_support_iteration(self):
+    def test_it_supports_iteration(self):
         myFake = self.objectFake()
         self.wrList += [myFake, myFake, myFake, myFake]
         num_mock = 0
@@ -93,9 +93,17 @@ class WeakrefListTest(unittest.TestCase):
             gc.collect()
         self.assertEqual(0, len(wrList))
 
-    def test_it_supports_slice(self):
+    def test_it_supports_slice_on_int(self):
         wrList = WeakList(range(10))
-        self.assertEqual([1, 2, 3], wrList[1:4])
+        self.assertEqual(WeakList([1, 2, 3]), wrList[1:4])
+
+    def test_it_supports_slice_on_objects(self):
+        myFake1 = self.objectFake()
+        myFake2 = self.objectFake()
+        myFake3 = self.objectFake()
+        myFake4 = self.objectFake()
+        wrList = WeakList([myFake1, myFake2, myFake3, myFake4])
+        self.assertEqual([myFake2, myFake3], list(wrList[1:3]))
 
 
 
