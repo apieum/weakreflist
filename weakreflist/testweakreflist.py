@@ -82,7 +82,7 @@ class WeakrefListTest(unittest.TestCase):
         for mock in self.wrList:
             num_mock += 1
             self.assertEqual(mock, myFake)
-        self.assertEqual(num_mock, len(self.wrList))
+        self.assertEqual(num_mock, 4)
 
     def test_it_appends_ref_values_at_init(self):
         myFake = self.objectFake()

@@ -1,14 +1,11 @@
 # -*- coding: utf8 -*-
 import weakref
-import sys
-is_pypy = '__pypy__' in sys.builtin_module_names
-if is_pypy:
-    import gc
 
 
 class WeakList(list):
     def __init__(self, values=list()):
-        list.__init__(self, (self._getRef(value) for value in values))
+        list.__init__(self)
+        tuple(map(self.append, values))
 
     def _getRef(self, value):
         value = self._makeRef(value)
@@ -39,20 +36,16 @@ class WeakList(list):
     def __setitem__(self, key, value):
         return list.__setitem__(self, key, self._getRef(value))
 
-    def __iter__(self, *args, **kwargs):
-        return list.__iter__(self, *map(self._getValue, args), **kwargs)
-
-    def append(self, observer):
-        list.append(self, self._getRef(observer))
+    def append(self, value):
+        list.append(self, self._getRef(value))
 
     def remove(self, value):
         value = self._makeRef(value)
         while list.__contains__(self, value):
             list.remove(self, value)
-        if is_pypy: gc.collect()
 
-    def index(self, *args, **kwargs):
-        return list.index(self, *map(self._makeRef, args), **kwargs)
+    def index(self, value):
+        return list.index(self, self._getRef(value))
 
     def pop(self, value):
-        return list.pop(self, self._makeRef(value))
+        return list.pop(self, self._getRef(value))
