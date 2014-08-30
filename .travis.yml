@@ -1,0 +1,22 @@
+language: python
+python:
+  - "2.7"
+  - "3.2"
+  - "3.3"
+  - "pypy"
+  - "pypy3"
+# command to install dependencies
+install:
+    - "pip install -r requirements.txt"
+    - "pip install -r dev-requirements.txt"
+    - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install coverage coveralls; fi
+    - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install restructuredtext_lint Pygments; fi
+# command to run tests
+script:
+    - export COVERALLS_REPO_TOKEN=Kp8xKQJRR5tMESCRfHu1AveGCMI61gc7Q
+    - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then nosetests --with-coverage --cover-package=weakreflist; fi
+    - if [[ $TRAVIS_PYTHON_VERSION != '2.7' ]]; then nosetests; fi
+    - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then rst-lint README.rst; fi
+
+after_success:
+    - coveralls
