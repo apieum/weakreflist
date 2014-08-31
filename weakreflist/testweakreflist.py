@@ -28,7 +28,7 @@ class WeakrefListTest(unittest.TestCase):
         self.wrList.append(myFake)
         self.wrList.append(myFake)
         self.assertEqual(list.__getitem__(self.wrList, 0), list.__getitem__(self.wrList, 1))
-        self.assertEqual(self.wrList[0], self.wrList[1])
+        self.assertIs(self.wrList[0], self.wrList[1])
 
     def test_it_knows_if_it_contains_an_object(self):
         myFake0 = self.objectFake()
@@ -53,6 +53,17 @@ class WeakrefListTest(unittest.TestCase):
         self.assertEqual(1, len(self.wrList))
         self.wrList.remove(myFake)
         self.assertEqual(0, len(self.wrList))
+
+    def test_it_can_del_a_slice(self):
+        myFake0 = self.objectFake()
+        myFake1 = self.objectFake()
+        self.wrList.append(myFake0)
+        self.wrList.append(myFake0)
+        self.wrList.append(myFake1)
+        del self.wrList[1:]
+        with self.assertRaises(IndexError):
+            self.wrList[1]
+        self.assertEqual(1, len(self.wrList))
 
     def test_it_returns_value_and_not_a_ref(self):
         myFake = self.objectFake()
