@@ -3,49 +3,49 @@ import weakref
 
 
 class WeakList(list):
-    def __init__(self, values=list()):
+    def __init__(self, items=list()):
         list.__init__(self)
-        tuple(map(self.append, values))
+        tuple(map(self.append, items))
 
-    def _getValue(self, ref):
+    def get_value(self, item):
         try:
-            ref = ref()
+            item = item()
         finally:
-            return ref
+            return item
 
-    def _makeRef(self, value):
+    def make_ref(self, item):
         try:
-            value = weakref.ref(value, self.remove)
+            item = weakref.ref(item, self.remove)
         finally:
-            return value
+            return item
 
     def __contains__(self, item):
-        return list.__contains__(self, self._makeRef(item))
+        return list.__contains__(self, self.make_ref(item))
 
     def __getitem__(self, key):
         if isinstance(key, slice):
-            return type(self)(self._getValue(value) for value in list.__getitem__(self, key))
-        return self._getValue(list.__getitem__(self, key))
+            return type(self)(self.get_value(item) for item in list.__getitem__(self, key))
+        return self.get_value(list.__getitem__(self, key))
 
     def __getslice__(self, i, j):
         return self.__getitem__(slice(i, j))
 
-    def __setitem__(self, key, value):
-        return list.__setitem__(self, key, self._makeRef(value))
+    def __setitem__(self, key, item):
+        return list.__setitem__(self, key, self.make_ref(item))
 
     def __iter__(self):
         return iter(self[key] for key in range(len(self)))
 
-    def append(self, value):
-        list.append(self, self._makeRef(value))
+    def append(self, item):
+        list.append(self, self.make_ref(item))
 
-    def remove(self, value):
-        value = self._makeRef(value)
-        while list.__contains__(self, value):
-            list.remove(self, value)
+    def remove(self, item):
+        item = self.make_ref(item)
+        while list.__contains__(self, item):
+            list.remove(self, item)
 
-    def index(self, value):
-        return list.index(self, self._makeRef(value))
+    def index(self, item):
+        return list.index(self, self.make_ref(item))
 
-    def pop(self, value):
-        return list.pop(self, self._makeRef(value))
+    def pop(self, item):
+        return list.pop(self, self.make_ref(item))
