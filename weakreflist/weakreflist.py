@@ -44,6 +44,9 @@ class WeakList(list):
     def index(self, item):
         return list.index(self, self.make_ref(item))
 
+    def count(self, item):
+        return list.count(self, self.make_ref(item))
+
     def pop(self, item):
         return list.pop(self, self.make_ref(item))
 

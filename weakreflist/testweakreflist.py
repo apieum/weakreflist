@@ -147,6 +147,12 @@ class WeakrefListTest(unittest.TestCase):
         self.wrList.extend([myFake0, myFake0, myFake1])
         self.assertEqual(self.ref_item(2)(), myFake1)
 
+    def test_it_supports_count(self):
+        myFake0 = self.objectFake()
+        myFake1 = self.objectFake()
+        self.wrList.extend([myFake0, myFake0, myFake1])
+        self.assertEqual(2, self.wrList.count(myFake0))
+
 
 
 if __name__ == "__main__":
