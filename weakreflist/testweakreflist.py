@@ -108,16 +108,16 @@ class WeakrefListTest(unittest.TestCase):
         self.assertEqual(0, len(wrList))
 
     def test_it_supports_slice_on_int(self):
-        wrList = WeakList(range(10))
-        self.assertEqual(WeakList([1, 2, 3]), wrList[1:4])
+        self.wrList = WeakList(range(10))
+        self.assertEqual([self.ref_item(1), self.ref_item(2), self.ref_item(3)], self.wrList[1:4])
 
     def test_it_supports_slice_on_objects(self):
         myFake1 = self.objectFake()
         myFake2 = self.objectFake()
         myFake3 = self.objectFake()
         myFake4 = self.objectFake()
-        wrList = WeakList([myFake1, myFake2, myFake3, myFake4])
-        self.assertEqual(WeakList([myFake2, myFake3]), wrList[1:3])
+        self.wrList = WeakList([myFake1, myFake2, myFake3, myFake4])
+        self.assertEqual([self.ref_item(1), self.ref_item(2)], self.wrList[1:3])
 
     def test_it_can_set_slice_on_int(self):
         self.wrList[0:] = range(3)
@@ -132,6 +132,14 @@ class WeakrefListTest(unittest.TestCase):
         self.assertEqual(self.ref_item(1)(), myFake0)
         self.assertEqual(self.ref_item(2)(), myFake1)
         self.assertEqual(3, len(self.wrList))
+
+    def test_it_can_del_slices(self):
+        myFake0 = self.objectFake()
+        myFake1 = self.objectFake()
+        self.wrList[0:] = [myFake0, myFake0, myFake1]
+        del self.wrList[:2]
+        self.assertEqual(self.ref_item(0)(), myFake1)
+        self.assertEqual(1, len(self.wrList))
 
 
 
