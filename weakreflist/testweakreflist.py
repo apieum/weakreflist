@@ -121,9 +121,10 @@ class WeakrefListTest(unittest.TestCase):
             gc.collect()
         self.assertEqual(0, len(wr_list))
         self.assertEqual(0, len(self.wr_list))
+
     def test_it_supports_iteration(self):
         fake_obj = self.objectFake()
-        self.wr_list += [fake_obj, fake_obj, fake_obj, fake_obj]
+        self.wr_list.extend([fake_obj, fake_obj, fake_obj, fake_obj])
         num_mock = 0
         for mock in self.wr_list:
             num_mock += 1
@@ -151,6 +152,17 @@ class WeakrefListTest(unittest.TestCase):
         self.wr_list = WeakList([fake_obj1, fake_obj2, fake_obj3, fake_obj4])
         expected = WeakList([self.ref_item(1)(), self.ref_item(2)()])
         self.assertEqual(expected, self.wr_list[1:3])
+
+    def test_get_slice_update_finalizer(self):
+        fake_obj1 = self.objectFake()
+        fake_obj2 = self.objectFake()
+        self.wr_list = WeakList([fake_obj1, fake_obj2])
+        sliced = self.wr_list[1:]
+        del fake_obj2
+        if is_pypy:
+            gc.collect()
+        self.assertEqual(1, len(self.wr_list))
+        self.assertEqual(0, len(sliced))
 
     def test_it_supports_slice_with_steps_on_objects(self):
         fake_obj1 = self.objectFake()
@@ -189,6 +201,16 @@ class WeakrefListTest(unittest.TestCase):
         self.wr_list.extend([fake_obj0, fake_obj0, fake_obj1])
         self.assertEqual(self.ref_item(2)(), fake_obj1)
 
+    def test_extend_update_finalizer(self):
+        fake_obj = self.objectFake()
+        wr_list = WeakList([fake_obj])
+        self.wr_list.extend(wr_list)
+        del fake_obj
+        if is_pypy:
+            gc.collect()
+        self.assertEqual(0, len(wr_list))
+        self.assertEqual(0, len(self.wr_list))
+
     def test_it_supports_count(self):
         fake_obj0 = self.objectFake()
         fake_obj1 = self.objectFake()
@@ -215,9 +237,20 @@ class WeakrefListTest(unittest.TestCase):
         fake_obj0 = self.objectFake()
         fake_obj1 = self.objectFake()
         self.wr_list.extend([fake_obj0, fake_obj1])
-        expected = WeakList(reversed(self.wr_list))
+        expected = reversed(self.wr_list)
         self.wr_list.reverse()
         self.assertEqual(expected, self.wr_list)
+
+    def test_reversed_update_finalizer(self):
+        fake_obj0 = self.objectFake()
+        fake_obj1 = self.objectFake()
+        self.wr_list.extend([fake_obj0, fake_obj1])
+        wr_list = reversed(self.wr_list)
+        del fake_obj1
+        if is_pypy:
+            gc.collect()
+        self.assertEqual(1, len(wr_list))
+        self.assertEqual(1, len(self.wr_list))
 
     def test_it_supports_sort(self):
         fake_obj0 = self.objectFake()

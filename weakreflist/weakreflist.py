@@ -84,6 +84,9 @@ class WeakList(list):
 
         def __setslice__(self, from_index, to_index, items):
             return self.__setitem__(slice(from_index, to_index), items)
+
+        def __getslice__(self, from_index, to_index):
+            return self.__getitem__(slice(from_index, to_index))
     else:
         def sort(self, key=None, reverse=False):
             return list.sort(self, key=self._sort_key(key), reverse=reverse)
