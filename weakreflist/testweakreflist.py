@@ -10,7 +10,19 @@ if is_pypy:
 
 class WeakrefListTest(unittest.TestCase):
     class objectFake(object):
-        pass
+        __count__= 0
+        def __init__(self):
+            type(self).__count__ +=1
+            self.index = type(self).__count__
+
+        def __gt__(self, other):
+            return self.index > other.index
+
+        def __lt__(self, other):
+            return self.index < other.index
+
+        def __eq__(self, other):
+            return self.index == other.index
 
     def setUp(self):
         self.wr_list = WeakList()
@@ -177,6 +189,62 @@ class WeakrefListTest(unittest.TestCase):
         self.wr_list.reverse()
         self.assertEqual(self.ref_item(0)(), fake_obj1)
         self.assertEqual(self.ref_item(1)(), fake_obj0)
+
+    def test_it_supports_sort(self):
+        fake_obj0 = self.objectFake()
+        fake_obj1 = self.objectFake()
+        self.wr_list.extend([fake_obj1, fake_obj0])
+        expected = WeakList(sorted(list(self.wr_list)))
+        self.wr_list.sort()
+        self.assertGreater(fake_obj1, fake_obj0)
+        self.assertEqual(expected, self.wr_list)
+
+    def test_it_supports_sort_with_reverse(self):
+        fake_obj0 = self.objectFake()
+        fake_obj1 = self.objectFake()
+        self.wr_list.extend([fake_obj0, fake_obj1])
+        expected = WeakList(sorted(list(self.wr_list), reverse=True))
+        not_expected = WeakList(sorted(list(self.wr_list)))
+        self.wr_list.sort(reverse=True)
+        self.assertEqual(expected, self.wr_list)
+        self.assertNotEqual(not_expected, self.wr_list)
+
+    def test_it_supports_sort_with_key(self):
+        def index_plus_2_if_odd(item):
+            return item.index + 2 if item.index % 2 != 0 else item.index
+        fake_obj0 = self.objectFake()
+        fake_obj1 = self.objectFake()
+        self.wr_list.extend([fake_obj1, fake_obj0])
+        expected = WeakList(sorted(list(self.wr_list), key=index_plus_2_if_odd))
+        self.wr_list.sort(key=index_plus_2_if_odd)
+        self.assertEqual(expected, self.wr_list)
+
+    if sys.version_info < (3, ):
+        def test_it_supports_sort_with_cmp(self):
+            def compare(item1, item2):
+                return cmp(item2.index, item1.index)
+
+            fake_obj0 = self.objectFake()
+            fake_obj1 = self.objectFake()
+            self.wr_list.extend([fake_obj0, fake_obj1])
+            expected = WeakList(sorted(list(self.wr_list), cmp=compare))
+            not_expected = WeakList(sorted(list(self.wr_list)))
+            self.wr_list.sort(cmp=compare)
+            self.assertEqual(expected, self.wr_list)
+            self.assertNotEqual(not_expected, self.wr_list)
+
+        def test_it_supports_sort_with_key_and_cmp(self):
+            def index_plus_2_if_odd(item):
+                return item.index + 2 if item.index % 2 != 0 else item.index
+            def compare(item1, item2):
+                return cmp(item2, item1)
+
+            fake_obj0 = self.objectFake()
+            fake_obj1 = self.objectFake()
+            self.wr_list.extend([fake_obj0, fake_obj1])
+            expected = WeakList(sorted(list(self.wr_list), cmp=compare, key=index_plus_2_if_odd))
+            self.wr_list.sort(cmp=compare, key=index_plus_2_if_odd)
+            self.assertEqual(expected, self.wr_list)
 
 
 

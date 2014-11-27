@@ -1,5 +1,6 @@
 # -*- coding: utf8 -*-
 from weakref import ref, ReferenceType
+import sys
 
 
 class WeakList(list):
@@ -58,3 +59,13 @@ class WeakList(list):
 
     def extend(self, items):
         return list.extend(self, map(self.make_ref, items))
+
+    def _sort_key(self, key=None):
+        return self.get_value if key == None else lambda item: key(self.get_value(item))
+
+    if sys.version_info < (3,):
+        def sort(self, cmp=None, key=None, reverse=False):
+            return list.sort(self, cmp=cmp, key=self._sort_key(key), reverse=reverse)
+    else:
+        def sort(self, key=None, reverse=False):
+            return list.sort(self, key=self._sort_key(key), reverse=reverse)
