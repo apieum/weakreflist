@@ -138,7 +138,17 @@ class WeakrefListTest(unittest.TestCase):
         fake_obj3 = self.objectFake()
         fake_obj4 = self.objectFake()
         self.wr_list = WeakList([fake_obj1, fake_obj2, fake_obj3, fake_obj4])
-        self.assertEqual([self.ref_item(1), self.ref_item(2)], self.wr_list[1:3])
+        expected = WeakList([self.ref_item(1)(), self.ref_item(2)()])
+        self.assertEqual(expected, self.wr_list[1:3])
+
+    def test_it_supports_slice_with_steps_on_objects(self):
+        fake_obj1 = self.objectFake()
+        fake_obj2 = self.objectFake()
+        fake_obj3 = self.objectFake()
+        fake_obj4 = self.objectFake()
+        self.wr_list = WeakList([fake_obj1, fake_obj2, fake_obj3, fake_obj4])
+        expected = WeakList([self.ref_item(1)(), self.ref_item(3)()])
+        self.assertEqual(expected, self.wr_list[1::2])
 
     def test_it_can_set_slice_on_int(self):
         self.wr_list[0:] = range(3)
