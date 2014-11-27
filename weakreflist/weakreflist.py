@@ -5,8 +5,7 @@ import sys
 
 class WeakList(list):
     def __init__(self, items=list()):
-        list.__init__(self)
-        self.extend(items)
+        list.__init__(self, map(self.make_ref, items))
 
     def get_value(self, item):
         return item() if isinstance(item, ReferenceType) else item
