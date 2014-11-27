@@ -23,12 +23,11 @@ class WeakList(list):
         return list.__contains__(self, self.make_ref(item))
 
     def __getitem__(self, index):
-        if isinstance(index, slice):
-            return type(self)(map(self.get_value, list.__getitem__(self, index)))
-        return self.get_value(list.__getitem__(self, index))
+        items = list.__getitem__(self, index)
+        return type(self)(map(self.get_value, items)) if isinstance(index, slice) else self.get_value(items)
 
     def __setitem__(self, index, item):
-        items = isinstance(index, slice) and map(self.make_ref, item) or self.make_ref(item)
+        items = map(self.make_ref, item) if isinstance(index, slice) else self.make_ref(item)
         return list.__setitem__(self, index, items)
 
     def __setslice__(self, from_index, to_index, items):
