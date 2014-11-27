@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-import weakref
+from weakref import ref, ReferenceType
 
 
 class WeakList(list):
@@ -8,14 +8,11 @@ class WeakList(list):
         tuple(map(self.append, items))
 
     def get_value(self, item):
-        try:
-            item = item()
-        finally:
-            return item
+        return item() if isinstance(item, ReferenceType) else item
 
     def make_ref(self, item):
         try:
-            item = weakref.ref(item, self.remove)
+            item = ref(item, self.remove)
         finally:
             return item
 
