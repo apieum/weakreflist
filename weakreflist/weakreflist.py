@@ -50,5 +50,8 @@ class WeakList(list):
     def pop(self, item):
         return list.pop(self, self.make_ref(item))
 
+    def insert(self, index, item):
+        return list.insert(self, index, self.make_ref(item))
+
     def extend(self, items):
         tuple(map(self.append, items))
