@@ -12,7 +12,7 @@ class WeakList(list):
 
     def make_ref(self, item):
         try:
-            item = ref(item, self.remove)
+            item = ref(item, self.remove_all)
         finally:
             return item
 
