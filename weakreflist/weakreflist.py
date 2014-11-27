@@ -22,19 +22,19 @@ class WeakList(list):
     def __contains__(self, item):
         return list.__contains__(self, self.make_ref(item))
 
-    def __getitem__(self, key):
-        if isinstance(key, slice):
-            return type(self)(self.get_value(item) for item in list.__getitem__(self, key))
-        return self.get_value(list.__getitem__(self, key))
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            return type(self)(self.get_value(item) for item in list.__getitem__(self, index))
+        return self.get_value(list.__getitem__(self, index))
 
-    def __getslice__(self, i, j):
-        return self.__getitem__(slice(i, j))
+    def __getslice__(self, from_index, to_index):
+        return self.__getitem__(slice(from_index, to_index))
 
-    def __setitem__(self, key, item):
-        return list.__setitem__(self, key, self.make_ref(item))
+    def __setitem__(self, index, item):
+        return list.__setitem__(self, index, self.make_ref(item))
 
     def __iter__(self):
-        return iter(self[key] for key in range(len(self)))
+        return iter(self[index] for index in range(len(self)))
 
     def append(self, item):
         list.append(self, self.make_ref(item))
