@@ -37,6 +37,9 @@ class WeakList(list):
         list.append(self, self.make_ref(item))
 
     def remove(self, item):
+        return list.remove(self, self.make_ref(item))
+
+    def remove_all(self, item):
         item = self.make_ref(item)
         while list.__contains__(self, item):
             list.remove(self, item)

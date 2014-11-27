@@ -53,8 +53,17 @@ class WeakrefListTest(unittest.TestCase):
     def test_it_can_remove_a_value(self):
         myFake = self.objectFake()
         self.wrList.append(myFake)
-        self.assertEqual(1, len(self.wrList))
+        self.wrList.append(myFake)
+        self.assertEqual(2, len(self.wrList))
         self.wrList.remove(myFake)
+        self.assertEqual(1, len(self.wrList))
+
+    def test_it_can_remove_all_values(self):
+        myFake = self.objectFake()
+        self.wrList.append(myFake)
+        self.wrList.append(myFake)
+        self.assertEqual(2, len(self.wrList))
+        self.wrList.remove_all(myFake)
         self.assertEqual(0, len(self.wrList))
 
     def test_it_can_del_a_slice(self):
