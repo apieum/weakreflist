@@ -31,7 +31,11 @@ class WeakList(list):
         return self.__getitem__(slice(from_index, to_index))
 
     def __setitem__(self, index, item):
-        return list.__setitem__(self, index, self.make_ref(item))
+        items = isinstance(index, slice) and map(self.make_ref, item) or self.make_ref(item)
+        return list.__setitem__(self, index, items)
+
+    def __setslice__(self, from_index, to_index, items):
+        return self.__setitem__(slice(from_index, to_index), items)
 
     def __iter__(self):
         return iter(self[index] for index in range(len(self)))

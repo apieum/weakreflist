@@ -15,19 +15,22 @@ class WeakrefListTest(unittest.TestCase):
     def setUp(self):
         self.wrList = WeakList()
 
+    def ref_item(self, index):
+        return list.__getitem__(self.wrList, index)
+
     def test_it_is_instance_of_list(self):
         self.assertIsInstance(self.wrList, list)
 
     def test_it_store_a_weakref_ref(self):
         myFake = self.objectFake()
         self.wrList.append(myFake)
-        self.assertIsInstance(list.__getitem__(self.wrList, 0), weakref.ReferenceType)
+        self.assertIsInstance(self.ref_item(0), weakref.ReferenceType)
 
     def test_if_a_weakref_already_stored_it_reuse_it(self):
         myFake = self.objectFake()
         self.wrList.append(myFake)
         self.wrList.append(myFake)
-        self.assertEqual(list.__getitem__(self.wrList, 0), list.__getitem__(self.wrList, 1))
+        self.assertEqual(self.ref_item(0), self.ref_item(1))
         self.assertIs(self.wrList[0], self.wrList[1])
 
     def test_it_knows_if_it_contains_an_object(self):
@@ -114,7 +117,21 @@ class WeakrefListTest(unittest.TestCase):
         myFake3 = self.objectFake()
         myFake4 = self.objectFake()
         wrList = WeakList([myFake1, myFake2, myFake3, myFake4])
-        self.assertEqual([myFake2, myFake3], list(wrList[1:3]))
+        self.assertEqual(WeakList([myFake2, myFake3]), wrList[1:3])
+
+    def test_it_can_set_slice_on_int(self):
+        self.wrList[0:] = range(3)
+        self.assertEqual(self.wrList[1:], [1, 2])
+        self.assertEqual(3, len(self.wrList))
+
+    def test_it_can_set_slice_on_objets(self):
+        myFake0 = self.objectFake()
+        myFake1 = self.objectFake()
+        self.wrList.append(myFake0)
+        self.wrList[1:2] = [myFake0, myFake1]
+        self.assertEqual(self.ref_item(1)(), myFake0)
+        self.assertEqual(self.ref_item(2)(), myFake1)
+        self.assertEqual(3, len(self.wrList))
 
 
 
