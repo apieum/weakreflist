@@ -5,7 +5,7 @@ from weakref import ref, ReferenceType
 class WeakList(list):
     def __init__(self, items=list()):
         list.__init__(self)
-        tuple(map(self.append, items))
+        self.extend(items)
 
     def get_value(self, item):
         return item() if isinstance(item, ReferenceType) else item
@@ -46,3 +46,6 @@ class WeakList(list):
 
     def pop(self, item):
         return list.pop(self, self.make_ref(item))
+
+    def extend(self, items):
+        tuple(map(self.append, items))
