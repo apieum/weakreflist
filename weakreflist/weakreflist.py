@@ -10,7 +10,7 @@ def is_slice(index):
 
 class WeakList(list):
     def __init__(self, items=list()):
-        list.__init__(self, map(self.make_ref, items))
+        list.__init__(self, self._refs(items))
 
     def get_value(self, item):
         return item() if isinstance(item, ReferenceType) else item
@@ -26,10 +26,10 @@ class WeakList(list):
 
     def __getitem__(self, index):
         items = list.__getitem__(self, index)
-        return type(self)(map(self.get_value, items)) if is_slice(index) else self.get_value(items)
+        return type(self)(self._values(items)) if is_slice(index) else self.get_value(items)
 
     def __setitem__(self, index, item):
-        items = map(self.make_ref, item) if is_slice(index) else self.make_ref(item)
+        items = self._refs(item) if is_slice(index) else self.make_ref(item)
         return list.__setitem__(self, index, items)
 
     def __iter__(self):
@@ -59,7 +59,13 @@ class WeakList(list):
         return list.insert(self, index, self.make_ref(item))
 
     def extend(self, items):
-        return list.extend(self, map(self.make_ref, items))
+        return list.extend(self, self._refs(items))
+
+    def _refs(self, items):
+        return map(self.make_ref, items)
+
+    def _values(self, items):
+        return map(self.get_value, items)
 
     def _sort_key(self, key=None):
         return self.get_value if key == None else lambda item: key(self.get_value(item))
