@@ -57,4 +57,4 @@ class WeakList(list):
         return list.insert(self, index, self.make_ref(item))
 
     def extend(self, items):
-        tuple(map(self.append, items))
+        return list.extend(self, map(self.make_ref, items))
