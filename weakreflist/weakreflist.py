@@ -35,6 +35,11 @@ class WeakList(list):
     def __iter__(self):
         return iter(self[index] for index in range(len(self)))
 
+    def __reversed__(self):
+        reversed_self = type(self)(self)
+        reversed_self.reverse()
+        return reversed_self
+
     def append(self, item):
         list.append(self, self.ref(item))
 

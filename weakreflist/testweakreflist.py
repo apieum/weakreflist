@@ -200,6 +200,14 @@ class WeakrefListTest(unittest.TestCase):
         self.assertEqual(self.ref_item(0)(), fake_obj1)
         self.assertEqual(self.ref_item(1)(), fake_obj0)
 
+    def test_it_supports_reversed(self):
+        fake_obj0 = self.objectFake()
+        fake_obj1 = self.objectFake()
+        self.wr_list.extend([fake_obj0, fake_obj1])
+        expected = WeakList(reversed(self.wr_list))
+        self.wr_list.reverse()
+        self.assertEqual(expected, self.wr_list)
+
     def test_it_supports_sort(self):
         fake_obj0 = self.objectFake()
         fake_obj1 = self.objectFake()
