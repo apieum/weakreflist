@@ -24,7 +24,7 @@ class WeakList(list):
 
     def __getitem__(self, index):
         if isinstance(index, slice):
-            return type(self)(self.get_value(item) for item in list.__getitem__(self, index))
+            return type(self)(map(self.get_value, list.__getitem__(self, index)))
         return self.get_value(list.__getitem__(self, index))
 
     def __setitem__(self, index, item):
