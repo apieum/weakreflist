@@ -2,6 +2,11 @@
 from weakref import ref, ReferenceType
 import sys
 
+__all__ = ["WeakList"]
+
+def is_slice(index):
+    return isinstance(index, slice)
+
 
 class WeakList(list):
     def __init__(self, items=list()):
@@ -21,10 +26,10 @@ class WeakList(list):
 
     def __getitem__(self, index):
         items = list.__getitem__(self, index)
-        return type(self)(map(self.get_value, items)) if isinstance(index, slice) else self.get_value(items)
+        return type(self)(map(self.get_value, items)) if is_slice(index) else self.get_value(items)
 
     def __setitem__(self, index, item):
-        items = map(self.make_ref, item) if isinstance(index, slice) else self.make_ref(item)
+        items = map(self.make_ref, item) if is_slice(index) else self.make_ref(item)
         return list.__setitem__(self, index, items)
 
     def __iter__(self):
