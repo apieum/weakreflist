@@ -106,10 +106,21 @@ class WeakrefListTest(unittest.TestCase):
 
     def test_it_supports_addition(self):
         fake_obj = self.objectFake()
-        myList = WeakList([fake_obj])
-        self.wr_list += myList
+        expected = WeakList([fake_obj])
+        self.wr_list+= expected
+        self.assertEqual(expected, self.wr_list)
         self.assertEqual(1, len(self.wr_list))
 
+
+    def test_addition_update_finalizer(self):
+        fake_obj = self.objectFake()
+        wr_list = WeakList([fake_obj])
+        self.wr_list+= wr_list
+        del fake_obj
+        if is_pypy:
+            gc.collect()
+        self.assertEqual(0, len(wr_list))
+        self.assertEqual(0, len(self.wr_list))
     def test_it_supports_iteration(self):
         fake_obj = self.objectFake()
         self.wr_list += [fake_obj, fake_obj, fake_obj, fake_obj]

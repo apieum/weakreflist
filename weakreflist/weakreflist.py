@@ -66,6 +66,9 @@ class WeakList(list):
     def extend(self, items):
         return list.extend(self, self._refs(items))
 
+    def __iadd__(self, other):
+        return list.__iadd__(self, self._refs(other))
+
     def _refs(self, items):
         return map(self.ref, items)
 
