@@ -82,11 +82,11 @@ class WeakList(list):
         def sort(self, cmp=None, key=None, reverse=False):
             return list.sort(self, cmp=cmp, key=self._sort_key(key), reverse=reverse)
 
-        def __setslice__(self, from_index, to_index, items):
-            return self.__setitem__(slice(from_index, to_index), items)
+        def __setslice__(self, lower_bound, upper_bound, items):
+            return self.__setitem__(slice(lower_bound, upper_bound), items)
 
-        def __getslice__(self, from_index, to_index):
-            return self.__getitem__(slice(from_index, to_index))
+        def __getslice__(self, lower_bound, upper_bound):
+            return self.__getitem__(slice(lower_bound, upper_bound))
     else:
         def sort(self, key=None, reverse=False):
             return list.sort(self, key=self._sort_key(key), reverse=reverse)
