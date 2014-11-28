@@ -100,5 +100,15 @@ Launch tests::
 
 
 
+============
+Contributors
+============
+
+Thanks to `BoonsNaibot <https://github.com/BoonsNaibot>`_ to have contributed to:
+  * extended slicing support
+  * \_\_reversed\_\_, count, extend, insert methods.
+
+
+
 .. image:: https://secure.travis-ci.org/apieum/weakreflist.png?branch=master
    :target: https://travis-ci.org/apieum/weakreflist
