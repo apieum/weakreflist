@@ -42,7 +42,7 @@ Same as a *list* except that when a weakref-able variable is deleted, it is remo
 
    .. code-block:: python
 
-      from weakref import WeakList
+      from weakreflist import WeakList
 
       class A(object):
           """weakrefs don't function directly on object()"""
@@ -62,7 +62,7 @@ Same as a *list* except that when a weakref-able variable is deleted, it is remo
 
    .. code-block:: python
 
-      from weakref import WeakList
+      from weakreflist import WeakList
       import gc
 
       class A(object):
