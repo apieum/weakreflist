@@ -4,11 +4,13 @@ import sys
 
 __all__ = ["WeakList"]
 
+
 def is_slice(index):
     return isinstance(index, slice)
 
 
 class WeakList(list):
+
     def __init__(self, items=list()):
         list.__init__(self, self._refs(items))
 
@@ -57,8 +59,13 @@ class WeakList(list):
     def count(self, item):
         return list.count(self, self.ref(item))
 
-    def pop(self, item):
-        return list.pop(self, self.ref(item))
+    def pop(self, index):
+        """
+        Pops an item from the list at the given index
+
+        :rtype: weakref
+        """
+        return list.pop(self, self.ref(index))
 
     def insert(self, index, item):
         return list.insert(self, index, self.ref(item))
@@ -76,7 +83,7 @@ class WeakList(list):
         return map(self.value, items)
 
     def _sort_key(self, key=None):
-        return self.value if key == None else lambda item: key(self.value(item))
+        return self.value if key is None else lambda item: key(self.value(item))
 
     if sys.version_info < (3,):
         def sort(self, cmp=None, key=None, reverse=False):
