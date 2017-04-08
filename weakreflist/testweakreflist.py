@@ -3,16 +3,18 @@ import weakref
 import unittest
 from .weakreflist import WeakList
 import sys
-is_pypy = '__pypy__' in sys.builtin_module_names
+is_pypy = "__pypy__" in sys.builtin_module_names
 if is_pypy:
     import gc
 
 
 class WeakrefListTest(unittest.TestCase):
+
     class objectFake(object):
-        __count__= 0
+        __count__ = 0
+
         def __init__(self):
-            type(self).__count__ +=1
+            type(self).__count__ += 1
             self.index = type(self).__count__
 
         def __gt__(self, other):
@@ -33,12 +35,12 @@ class WeakrefListTest(unittest.TestCase):
     def test_it_is_instance_of_list(self):
         self.assertIsInstance(self.wr_list, list)
 
-    def test_it_store_a_weakref_ref(self):
+    def test_it_stores_a_weakref_ref(self):
         fake_obj = self.objectFake()
         self.wr_list.append(fake_obj)
         self.assertIsInstance(self.ref_item(0), weakref.ReferenceType)
 
-    def test_if_a_weakref_already_stored_it_reuse_it(self):
+    def test_if_a_weakref_is_already_stored_it_reuses_it(self):
         fake_obj = self.objectFake()
         self.wr_list.append(fake_obj)
         self.wr_list.append(fake_obj)
@@ -52,7 +54,7 @@ class WeakrefListTest(unittest.TestCase):
         self.assertTrue(fake_obj0 in self.wr_list)
         self.assertFalse(fake_obj1 in self.wr_list)
 
-    def test_when_all_object_instance_are_deleted_all_ref_in_list_are_deleted(self):
+    def test_when_all_bindings_to_an_object_are_deleted_all_ref_in_list_are_deleted(self):
         fake_obj = self.objectFake()
         self.wr_list.append(fake_obj)
         self.wr_list.append(fake_obj)
@@ -107,15 +109,14 @@ class WeakrefListTest(unittest.TestCase):
     def test_it_supports_addition(self):
         fake_obj = self.objectFake()
         expected = WeakList([fake_obj])
-        self.wr_list+= expected
+        self.wr_list += expected
         self.assertEqual(expected, self.wr_list)
         self.assertEqual(1, len(self.wr_list))
-
 
     def test_addition_update_finalizer(self):
         fake_obj = self.objectFake()
         wr_list = WeakList([fake_obj])
-        self.wr_list+= wr_list
+        self.wr_list += wr_list
         del fake_obj
         if is_pypy:
             gc.collect()
@@ -178,7 +179,7 @@ class WeakrefListTest(unittest.TestCase):
         self.assertEqual(self.wr_list[1:], [1, 2])
         self.assertEqual(3, len(self.wr_list))
 
-    def test_it_can_set_slice_on_objets(self):
+    def test_it_can_set_slice_on_objects(self):
         fake_obj0 = self.objectFake()
         fake_obj1 = self.objectFake()
         self.wr_list.append(fake_obj0)
@@ -274,6 +275,7 @@ class WeakrefListTest(unittest.TestCase):
     def test_it_supports_sort_with_key(self):
         def index_plus_2_if_odd(item):
             return item.index + 2 if item.index % 2 != 0 else item.index
+
         fake_obj0 = self.objectFake()
         fake_obj1 = self.objectFake()
         self.wr_list.extend([fake_obj1, fake_obj0])
@@ -298,6 +300,7 @@ class WeakrefListTest(unittest.TestCase):
         def test_it_supports_sort_with_key_and_cmp(self):
             def index_plus_2_if_odd(item):
                 return item.index + 2 if item.index % 2 != 0 else item.index
+
             def compare(item1, item2):
                 return cmp(item2, item1)
 
@@ -307,7 +310,6 @@ class WeakrefListTest(unittest.TestCase):
             expected = WeakList(sorted(list(self.wr_list), cmp=compare, key=index_plus_2_if_odd))
             self.wr_list.sort(cmp=compare, key=index_plus_2_if_odd)
             self.assertEqual(expected, self.wr_list)
-
 
 
 if __name__ == "__main__":
