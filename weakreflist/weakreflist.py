@@ -59,7 +59,9 @@ class WeakList(list):
     def count(self, item):
         return list.count(self, self.ref(item))
 
-    def pop(self, index):
+    def pop(self, index=None):
+        if index is None:
+            index = len(self) - 1
         return self.value(list.pop(self, self.ref(index)))
 
     def insert(self, index, item):

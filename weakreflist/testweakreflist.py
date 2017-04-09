@@ -292,6 +292,15 @@ class WeakrefListTest(unittest.TestCase):
         self.assertIs(fake_obj0, given)
         self.assertIs(fake_obj1, self.wr_list[0])
 
+    def test_pop_without_parameter_returns_last_item(self):
+        fake_obj0 = self.objectFake()
+        fake_obj1 = self.objectFake()
+        self.wr_list.extend([fake_obj0, fake_obj1])
+        self.assertIs(fake_obj1, self.wr_list[1])
+        given = self.wr_list.pop()
+        self.assertIs(fake_obj1, given)
+        self.assertIs(1, len(self.wr_list))
+
     if sys.version_info < (3, ):
         def test_it_supports_sort_with_cmp(self):
             def compare(item1, item2):
