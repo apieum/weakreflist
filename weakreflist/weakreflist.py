@@ -60,12 +60,7 @@ class WeakList(list):
         return list.count(self, self.ref(item))
 
     def pop(self, index):
-        """
-        Pops an item from the list at the given index
-
-        :rtype: weakref
-        """
-        return list.pop(self, self.ref(index))
+        return self.value(list.pop(self, self.ref(index)))
 
     def insert(self, index, item):
         return list.insert(self, index, self.ref(item))

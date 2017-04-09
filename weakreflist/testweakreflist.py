@@ -283,6 +283,15 @@ class WeakrefListTest(unittest.TestCase):
         self.wr_list.sort(key=index_plus_2_if_odd)
         self.assertEqual(expected, self.wr_list)
 
+    def test_it_supports_pop(self):
+        fake_obj0 = self.objectFake()
+        fake_obj1 = self.objectFake()
+        self.wr_list.extend([fake_obj0, fake_obj1])
+        self.assertIs(fake_obj1, self.wr_list[1])
+        given = self.wr_list.pop(0)
+        self.assertIs(fake_obj0, given)
+        self.assertIs(fake_obj1, self.wr_list[0])
+
     if sys.version_info < (3, ):
         def test_it_supports_sort_with_cmp(self):
             def compare(item1, item2):
