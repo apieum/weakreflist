@@ -296,7 +296,6 @@ class WeakrefListTest(unittest.TestCase):
         fake_obj0 = self.objectFake()
         fake_obj1 = self.objectFake()
         self.wr_list.extend([fake_obj0, fake_obj1])
-        self.assertIs(fake_obj1, self.wr_list[1])
         given = self.wr_list.pop()
         self.assertIs(fake_obj1, given)
         self.assertIs(1, len(self.wr_list))
