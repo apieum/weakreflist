@@ -301,6 +301,17 @@ class WeakrefListTest(unittest.TestCase):
         self.assertIs(fake_obj1, given)
         self.assertIs(1, len(self.wr_list))
 
+    def test_pop_on_empty_list_raise_IndexError(self):
+        with self.assertRaises(IndexError):
+            given = self.wr_list.pop()
+
+    def test_pop_on_unexisting_index_raises_IndexError(self):
+        fake_obj0 = self.objectFake()
+        fake_obj1 = self.objectFake()
+        self.wr_list.extend([fake_obj0, fake_obj1])
+        with self.assertRaises(IndexError):
+            given = self.wr_list.pop(2)
+
     if sys.version_info < (3, ):
         def test_it_supports_sort_with_cmp(self):
             def compare(item1, item2):
